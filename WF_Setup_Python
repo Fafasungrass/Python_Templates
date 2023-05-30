@@ -1,0 +1,30 @@
+
+import ssl
+import urllib2
+
+apiKey = '{Your Sandbox API Key}';
+gatewayCompanyId = '{Your Gateway Company ID}';
+clientRequestId = '{UUID that you generated to identify the request}';
+
+
+ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+request = urllib2.Request(url = 'https://api-sandbox.wellsfargo.com/utilities/v1/hello-wellsfargo')
+
+request.add_header('Authorization', 'Bearer ' + apiKey)
+request.add_header('gateway-company-id', gatewayCompanyId)
+request.add_header('client-request-id', clientRequestId)
+
+
+try:
+    response = urllib2.urlopen(request,context = ssl_context)
+    response_code = response.code
+    response_headers = response.info()
+    response_body = response.read()
+except urllib2.HTTPError as e:
+    response_code = e.code
+    response_headers = e.info()
+    response_body = e.read()
+
+print(response_code)
+print(response_headers)
+print(response_body)
